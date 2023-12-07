@@ -8,6 +8,24 @@
 #include <algorithm>
 #include <iterator>
 
+void dropDup(std::vector<char>& v1)
+{
+    for (auto base = v1.begin(); base != v1.end(); ++base)
+    {
+        for (auto it = base + 1; it != v1.end(); )
+        {
+            if (*base == *it)
+            {
+                it = v1.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+    }
+}
+
 class Letter 
 {
 public:
@@ -26,11 +44,10 @@ public:
     }
 };
 
+
 int main()
 {
     setlocale(LC_ALL, "ru");
-
-    std::cout << "Hello World!\n";
     int count = 0;
     char s;
     std::vector<char> ivec1;
@@ -44,40 +61,24 @@ int main()
 
     std::cout << "Вы ввели фразу: " << std::endl;
 
+    std::cout << "[IN]:" << std::endl;
+
     for (int i = 0; i < ivec1.size(); i++)
     {
-        std::cout << ivec1[i];
+        std::cout << ivec1[i] << std::endl;
     }
 
     std::vector<char> ivec2;
 
     copy(ivec1.begin(), ivec1.end(), back_inserter(ivec2));
 
-    std::cout << "Элементы вектора 2 :" << std::endl;
-
-    for (int i = 0; i < ivec2.size(); i++)
-    {
-        std::cout << ivec2[i] << std::endl;
-    }
-
     auto result = std::unique(std::begin(ivec1), std::end(ivec1));
 
-    ivec1.erase(result, ivec1.end());
-    
-    std::cout << "Элементы вектора 1 после того, как убрали не уникальные элементы:" << std::endl;
-    
-    for (auto element : ivec1)
-    {
-        std::cout << element << std::endl;
-    }
-
-    //создаём вектор из пар (ключ, значение), где ключ это буква, а значение это количество этой буквы во фразе
+    dropDup(ivec1);
 
     std::vector<Letter> res;
 
-
-
-    std::cout << "Расчёт количества одинаковых элементов в первоначальном векторе" << std::endl;
+    //Расчёт количества одинаковых элементов в первоначальном векторе;
 
    for (int i = 0; i < ivec1.size() - 1; i++)
    {
@@ -89,10 +90,7 @@ int main()
                 count++;
             };   
         }
-       // std::cout << ivec1[i] << ":" << count << std::endl;
         Letter l1(ivec1[i], count);
-
-        l1.print(ivec1[i], count);
         res.push_back(l1);
    }
 
@@ -102,7 +100,9 @@ int main()
            return p1.x > p2.x;
        });
 
-   std::cout << "Вывод отсортированных уникальных элементов" << std::endl;
+   //Вывод отсортированных уникальных элементов
+   std::cout << "[OUT]: " << std::endl;
+   
    for (auto element : res)
    {
        std::cout << element.a << " : "  << element.x << std::endl;
